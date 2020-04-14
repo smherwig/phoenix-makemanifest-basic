@@ -14,6 +14,7 @@ python version.  VERSION should be 2.7, 3.5, 3.6, etc.  The script does
 not include any .pyc files.  The script searchs:
 
     - /usr/lib/python{VERSION}
+    - /usr/local/lib/python{VERSION}/dist-packages
     - /usr/lib/python{MAJOR_VERSION}/dist-packages
 
 as well as the .so dependencies for /usr/bin/python{VERSION}, 
@@ -148,6 +149,7 @@ def main(argv):
     # get the .py and .so files under these directories
     fileset = set()
     fileset.update(dirwalk('/usr/lib/python%s' % py_version, valid_exts))
+    fileset.update(dirwalk('/usr/local/lib/python%s/dist-packages'% py_version, valid_exts))
     fileset.update(dirwalk('/usr/lib/python%s/dist-packages' % py_major_version, valid_exts))
 
     for path in args[1:]:
