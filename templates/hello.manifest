@@ -1,0 +1,53 @@
+# This manifest was prepared on Ubuntu 18.04 for a "hello world" executable
+#
+# Python must be run with the pal_loader:
+#
+# SGX=1 GRAPHENE_ROOT/Runtime/pal_loader hello.manifest.sgx
+# 
+# You will need to change any references to /home/smherwig to fit your setup
+
+# The executable to load in Graphene.
+loader.exec = file:/home/smherwig/src/hello/hello
+
+# Graphene environment, including the path of the library OS and the debug
+# option (inline/none).
+loader.preload = file:/home/smherwig/src/graphene/Runtime/libsysdb.so
+loader.debug_type = inline
+
+# Environment variables
+loader.env.LD_LIBRARY_PATH = /lib
+
+# Mounted FSes. The following "chroot" FSes mount a part of the host FS into the
+# guest. Other parts of the host FS will not be available in the guest.
+
+# Default glibc files, mounted from the Runtime directory in GRAPHENEDIR.
+fs.mount.lib.type = chroot
+fs.mount.lib.path = /lib
+fs.mount.lib.uri = file:/home/smherwig/src/graphene/Runtime
+
+# SGX general options
+
+# Set the virtual memory size of the SGX enclave. For SGX v1, the enclave
+# size must be specified during signing.   Must be a power of 2
+sgx.enclave_size = 128M
+
+# Set the maximum number of enclave threads. For SGX v1, the number of enclave
+# TCSes must be specified during signing, so the application cannot use more
+# threads than the number of TCSes. Note that Graphene also creates an internal
+# thread for handling inter-process communication (IPC), and potentially another
+# thread for asynchronous events. Therefore, the actual number of threads that
+# the application can create is (sgx.thread_num - 2).
+sgx.thread_num = 4
+
+# SGX trusted libraries
+
+# glibc libraries (we don't really need all of these, but it doesn't hurt)
+sgx.trusted_files.ld = file:/home/smherwig/src/graphene/Runtime/ld-linux-x86-64.so.2
+sgx.trusted_files.libc = file:/home/smherwig/src/graphene/Runtime/libc.so.6
+sgx.trusted_files.libm = file:/home/smherwig/src/graphene/Runtime/libm.so.6
+sgx.trusted_files.libdl = file:/home/smherwig/src/graphene/Runtime/libdl.so.2
+sgx.trusted_files.librt = file:/home/smherwig/src/graphene/Runtime/librt.so.1
+sgx.trusted_files.libutil = file:/home/smherwig/src/graphene/Runtime/libutil.so.1
+sgx.trusted_files.libpthread = file:/home/smherwig/src/graphene/Runtime/libpthread.so.0
+sgx.trusted_files.libnssdns = file:/home/smherwig/src/graphene/Runtime/libnss_dns.so.2
+sgx.trusted_files.libresolve = file:/home/smherwig/src/graphene/Runtime/libresolv.so.2

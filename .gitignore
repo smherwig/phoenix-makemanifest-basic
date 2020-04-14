@@ -1,0 +1,15 @@
+# copy-signing-tools.sh copies these files from Graphene's source
+/aesm_pb2.py
+/aesm.proto
+/generated_offsets.py
+/pal-sgx-get-token
+/pal-sgx-sign
+/pal_sgx_sign.py
+
+# byte-compiled /optimized
+__pycache__/
+*.py[cod]
+
+# enclave signature and launch token files
+*.sig
+*.token
