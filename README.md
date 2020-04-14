@@ -1,15 +1,15 @@
-Example usage:
 
 Note that you will have to change the paths in the manifest files and in the
 command-lines below to match your environment.  The instructions are the same
 for vanilla Graphene or for Phoenix.
 
+Example usage:
 ```
 # copy the enclave signing and token retrieval tools from the Graphene/Phoenix
 # source 
 ./copy-signing-tools.sh ~/src/graphene
 
-# Produce a enclave signature and launch token for an application
+# Produce an enclave signature and launch token for an application
 ./make-manifest.sh ~/src/graphene templates/hello.manifest
 
 # run the application in an enclave
