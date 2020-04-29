@@ -13,3 +13,6 @@ __pycache__/
 # enclave signature and launch token files
 *.sig
 *.token
+
+# signed manifests
+*.manifest.sgx
