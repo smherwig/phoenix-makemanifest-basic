@@ -2,7 +2,7 @@
 #
 # Python must be run with the pal_loader:
 #
-# SGX=1 GRAPHENE_ROOT/Runtime/pal_loader python3.5.manifest.sgx /scripts/hello.py
+# SGX=1 GRAPHENE_ROOT/Runtime/pal_loader python3.5.manifest.sgx /home/hello.py
 # 
 # You will need to change any references to /home/smherwig to fit your setup
 
@@ -59,11 +59,16 @@ fs.mount.etc.type = chroot
 fs.mount.etc.path = /etc
 fs.mount.etc.uri = file:/etc
 
-# Mount /scripts
-fs.mount.scripts.type = chroot
-fs.mount.scripts.path = /scripts
-fs.mount.scripts.uri = file:/home/smherwig/play/pyscripts/
-sgx.trusted_files.user1 = file:/home/smherwig/play/pyscripts/hello.py
+# Mount /home
+fs.mount.home.type = chroot
+fs.mount.home.path = /home
+fs.mount.home.uri = file:/home/smherwig/src/makemanifest-basic/templates/home
+sgx.trusted_files.home0 = file:/home/smherwig/src/makemanifest-basic/templates/home/cat.py
+sgx.trusted_files.home1 = file:/home/smherwig/src/makemanifest-basic/templates/home/cp.py
+sgx.trusted_files.home2 = file:/home/smherwig/src/makemanifest-basic/templates/home/hello.py
+sgx.trusted_files.home3 = file:/home/smherwig/src/makemanifest-basic/templates/home/testfile
+sgx.trusted_files.home4 = file:/home/smherwig/src/makemanifest-basic/templates/home/wget.py
+sgx.trusted_files.home5 = file:/home/smherwig/src/makemanifest-basic/templates/home/webserver.py
 
 # SGX general options
 
