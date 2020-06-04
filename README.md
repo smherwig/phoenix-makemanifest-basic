@@ -51,7 +51,7 @@ timeserver.rate = 10000
 The `timeserver.url` must always start with `udp:`; you should specify the IP
 address and port, as appropriate.
 
-The `timeserver.rate` must be in the range `[0, 10000]`; `0` means to neve use
+The `timeserver.rate` must be in the range `[0, 10000]`; `0` means to never use
 the timeserver; `10000` means contact the timeserver for every call; `5000`
 means use the timeserver for half the calls, etc.
 
