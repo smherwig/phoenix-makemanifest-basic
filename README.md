@@ -24,8 +24,32 @@ respectively.  Both scripts accept a `--help` flag to display their usage
 statement.
 
 
+Using the fsserver
+------------------
+
+If the fsserver only hosts data (as opposed to code), then first run 
+
+```
+./helpers/cert2hex.sh root.crt
+```
+
+where `root.crt` is the "CA" certificate that signed the filserver's
+certificate.  Then, add the following lines to the `manifest.conf`:
+
+```
+fs.mount.fsserver0.type = nextfs
+fs.mount.fsserver0.path = /fsserver0
+fs.mount.fsserver0.uri = tcp:127.0.0.1:9084
+phoenix.ca_der= <the hexstring output of ./helpers/cert2hex.sh root.crt>
+```
+
+The `uri` should start with `tcp:`, and the IP address will likely be
+`127.0.0.1`; enter the appropriate port number.
+
+
 Using the timeserver
 --------------------
+
 To have Phoenix invoke the timeserver for time related system calls, you need to
 specify in the manifest file the URL for the timeserver, the modulus and
 exponent of the timeserver's public key, and the proportion (rate) of
@@ -54,5 +78,3 @@ address and port, as appropriate.
 The `timeserver.rate` must be in the range `[0, 10000]`; `0` means to never use
 the timeserver; `10000` means contact the timeserver for every call; `5000`
 means use the timeserver for half the calls, etc.
-
-
