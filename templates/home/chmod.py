@@ -3,6 +3,6 @@
 import os
 import sys
 
-path = sys.argv[1]
-mode = int(sys.argv[2], base=8)
-os.chmod(sys.argv[1], mode) 
+mode = int(sys.argv[1], base=8)
+path = sys.argv[2]
+os.chmod(path, mode) 
