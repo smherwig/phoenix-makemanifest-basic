@@ -26,17 +26,18 @@ statement.
 
 Lua 5.3 template
 ----------------
-The lua template runs lua5.3.  Since Lua's builtin libraries are minimal,
-I also added the popular thrid-party modules `luaposix` as a trusted.
+The Lua template (`templates/lua5.3.manifest) runs lua5.3.  Since Lua's builtin
+libraries are minimal, I also added the popular thrid-party module `luaposix`
+as trusted.
 
-To install Lua posix, enter
+To install `luaposix`, enter
 
 ```
 sudo apt-get install lua-posix-dev
 ```
 
 There is a bug in the debian lua-posix debian package
-(https://buts.debian.org/cgi-bin/bugreport.cgi?bug=891541); thus, after
+(https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=891541); thus, after
 installation, you also have to create a symlink:
 
 ```
