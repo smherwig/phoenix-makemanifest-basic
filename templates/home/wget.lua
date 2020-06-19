@@ -19,10 +19,10 @@ local function printf(fmt, ...)
     io.stdout:write(fmt:format(...))
 end
 
-local r, err = M.getaddrinfo('www.cs.umd.edu', 'http', 
+local r, gai_errstr, gai_errnum = M.getaddrinfo('www.cs.umd.edu', 'http', 
         {family=M.AF_INET, socktype=M.SOCK_STREAM})
 if not r then
-    error(err)
+    error(string.format('%s: [gai_errnum=%d]', gai_errstr, gai_errnum))
 end
 
 for k,v in pairs(r[1]) do

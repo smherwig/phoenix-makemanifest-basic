@@ -6,13 +6,12 @@
 # 
 # You will need to change any references to /home/smherwig to fit your setup
 
-
 # The executable to load in Graphene.
 loader.exec = file:/usr/bin/lua5.3
 
 # Graphene environment, including the path of the library OS and the debug
 # option (inline/none).
-loader.preload = file:/home/smherwig/src/graphene/Runtime/libsysdb.so
+loader.preload = file:/home/smherwig/src/phoenix/Runtime/libsysdb.so
 loader.debug_type = inline
 
 #------------------------------------------------------------
@@ -40,29 +39,63 @@ sgx.thread_num = 4
 #------------------------------------------------------------
 fs.mount.lib.type = chroot
 fs.mount.lib.path = /lib
-fs.mount.lib.uri = file:/home/smherwig/src/graphene/Runtime
+fs.mount.lib.uri = file:/home/smherwig/src/phoenix/Runtime
 
 # glibc libraries
-sgx.trusted_files.ld = file:/home/smherwig/src/graphene/Runtime/ld-linux-x86-64.so.2
-sgx.trusted_files.libc = file:/home/smherwig/src/graphene/Runtime/libc.so.6
-sgx.trusted_files.libm = file:/home/smherwig/src/graphene/Runtime/libm.so.6
-sgx.trusted_files.libdl = file:/home/smherwig/src/graphene/Runtime/libdl.so.2
-sgx.trusted_files.librt = file:/home/smherwig/src/graphene/Runtime/librt.so.1
-sgx.trusted_files.libutil = file:/home/smherwig/src/graphene/Runtime/libutil.so.1
-sgx.trusted_files.libpthread = file:/home/smherwig/src/graphene/Runtime/libpthread.so.0
-sgx.trusted_files.libnssdns = file:/home/smherwig/src/graphene/Runtime/libnss_dns.so.2
-sgx.trusted_files.libresolve = file:/home/smherwig/src/graphene/Runtime/libresolv.so.2
+sgx.trusted_files.ld = file:/home/smherwig/src/phoenix/Runtime/ld-linux-x86-64.so.2
+sgx.trusted_files.libc = file:/home/smherwig/src/phoenix/Runtime/libc.so.6
+sgx.trusted_files.libm = file:/home/smherwig/src/phoenix/Runtime/libm.so.6
+sgx.trusted_files.libdl = file:/home/smherwig/src/phoenix/Runtime/libdl.so.2
+sgx.trusted_files.librt = file:/home/smherwig/src/phoenix/Runtime/librt.so.1
+sgx.trusted_files.libutil = file:/home/smherwig/src/phoenix/Runtime/libutil.so.1
+sgx.trusted_files.libpthread = file:/home/smherwig/src/phoenix/Runtime/libpthread.so.0
+sgx.trusted_files.libnssdns = file:/home/smherwig/src/phoenix/Runtime/libnss_dns.so.2
+sgx.trusted_files.libresolv = file:/home/smherwig/src/phoenix/Runtime/libresolv.so.2
 
 #------------------------------------------------------------
 # MOUNT /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu
 #------------------------------------------------------------
-fs.mount.lib_x86_64.type = chroot
-fs.mount.lib_x86_64.path = /lib/x86_64-linux-gnu
-fs.mount.lib_x86_64.uri = file:/lib/x86_64-linux-gnu
+fs.mount.lib_arch.type = chroot
+fs.mount.lib_arch.path = /lib/x86_64-linux-gnu
+fs.mount.lib_arch.uri = file:/lib/x86_64-linux-gnu
 
-# ./helpers/ldd_rec.py /usr/bin/lua5.3
-sgx.trusted_files.lua0 = file:/lib/x86_64-linux-gnu/libreadline.so.7
-sgx.trusted_files.lua1 = file:/lib/x86_64-linux-gnu/libtinfo.so.5
+# libraries that getaddrinfo(2) may need
+sgx.trusted_files.lib_arch_0 = file:/lib/x86_64-linux-gnu/libnss_files.so.2
+sgx.trusted_files.lib_arch_1 = file:/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2
+
+# lua5.3 dependencies 
+# (./helpers/ldd_rec.py /usr/bin/lua5.3)
+sgx.trusted_files.lib_arch_2 = file:/lib/x86_64-linux-gnu/libreadline.so.7
+sgx.trusted_files.lib_arch_3 = file:/lib/x86_64-linux-gnu/libtinfo.so.5
+
+# luaposix dependencies 
+# (./helpers/ldd_rec.py # /usr/lib/x86_64-linux-gnu/lua/5.3/posix.so)
+sgx.trusted_files.lib_arch_4 = file:/lib/x86_64-linux-gnu/libcrypt.so.1
+
+
+#------------------------------------------------------------
+# MOUNT /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu
+#------------------------------------------------------------
+fs.mount.usr_lib_arch.type = chroot
+fs.mount.usr_lib_arch.path = /usr/lib/x86_64-linux-gnu
+fs.mount.usr_lib_arch.uri = file:/usr/lib/x86_64-linux-gnu
+
+sgx.trusted_files.usr_lib_arch_0 = file:/usr/lib/x86_64-linux-gnu/lua/5.3/posix.so
+
+#------------------------------------------------------------
+# MOUNT /etc /etc
+#------------------------------------------------------------
+fs.mount.etc.type = chroot
+fs.mount.etc.path = /etc
+fs.mount.etc.uri = file:/etc
+
+# files getaddrinfo(2) may need
+sgx.trusted_files.etc_0 = file:/etc/hosts
+sgx.trusted_files.etc_1 = file:/etc/networks
+sgx.trusted_files.etc_2 = file:/etc/protocols
+sgx.trusted_files.etc_3 = file:/etc/services
+sgx.trusted_files.etc_4 = file:/etc/resolv.conf
+sgx.trusted_files.etc_5 = file:/etc/host.conf
 
 #------------------------------------------------------------
 # MOUNT /home/smherwig/src/makemanifest-basic/templates/home /home
@@ -71,10 +104,27 @@ fs.mount.home.type = chroot
 fs.mount.home.path = /home
 fs.mount.home.uri = file:/home/smherwig/src/makemanifest-basic/templates/home
 
-sgx.trusted_files.home0 = file:/home/smherwig/src/makemanifest-basic/templates/home/hello.lua
-sgx.trusted_files.home1 = file:/home/smherwig/src/makemanifest-basic/templates/home/cat.lua
-sgx.trusted_files.home2 = file:/home/smherwig/src/makemanifest-basic/templates/home/cp.lua
-sgx.trusted_files.home3 = file:/home/smherwig/src/makemanifest-basic/templates/home/testfile
+sgx.trusted_files.home_0 = file:/home/smherwig/src/makemanifest-basic/templates/home/cat.lua
+sgx.trusted_files.home_1 = file:/home/smherwig/src/makemanifest-basic/templates/home/chmod.lua
+sgx.trusted_files.home_2 = file:/home/smherwig/src/makemanifest-basic/templates/home/cp.lua
+sgx.trusted_files.home_3 = file:/home/smherwig/src/makemanifest-basic/templates/home/date.lua
+sgx.trusted_files.home_4 = file:/home/smherwig/src/makemanifest-basic/templates/home/echo.lua
+sgx.trusted_files.home_5 = file:/home/smherwig/src/makemanifest-basic/templates/home/getpid.lua
+sgx.trusted_files.home_6 = file:/home/smherwig/src/makemanifest-basic/templates/home/hello.lua
+sgx.trusted_files.home_7 = file:/home/smherwig/src/makemanifest-basic/templates/home/id.lua
+sgx.trusted_files.home_8 = file:/home/smherwig/src/makemanifest-basic/templates/home/lock.lua
+sgx.trusted_files.home_9 = file:/home/smherwig/src/makemanifest-basic/templates/home/mkdir.lua
+sgx.trusted_files.home_10 = file:/home/smherwig/src/makemanifest-basic/templates/home/printenv.lua
+sgx.trusted_files.home_11 = file:/home/smherwig/src/makemanifest-basic/templates/home/pwd.lua
+sgx.trusted_files.home_12 = file:/home/smherwig/src/makemanifest-basic/templates/home/rename.lua
+sgx.trusted_files.home_13 = file:/home/smherwig/src/makemanifest-basic/templates/home/rmdir.lua
+sgx.trusted_files.home_14 = file:/home/smherwig/src/makemanifest-basic/templates/home/scandir.lua
+sgx.trusted_files.home_15 = file:/home/smherwig/src/makemanifest-basic/templates/home/stat.lua
+sgx.trusted_files.home_16 = file:/home/smherwig/src/makemanifest-basic/templates/home/tree.lua
+sgx.trusted_files.home_17 = file:/home/smherwig/src/makemanifest-basic/templates/home/uname.lua
+sgx.trusted_files.home_18 = file:/home/smherwig/src/makemanifest-basic/templates/home/unlink.lua
+sgx.trusted_files.home_19 = file:/home/smherwig/src/makemanifest-basic/templates/home/wget.lua
+sgx.trusted_files.home_20 = file:/home/smherwig/src/makemanifest-basic/templates/home/testfile
 
 #------------------------------------------------------------
 # MOUNT /fsserver0 tcp:127.0.01:9084
@@ -89,4 +139,4 @@ sgx.trusted_files.home3 = file:/home/smherwig/src/makemanifest-basic/templates/h
 #------------------------------------------------------------
 # ENVIRONMENT VARIABLES
 #------------------------------------------------------------
-loader.env.LD_LIBRARY_PATH = /lib:/lib/x86_64-linux-gnu
+loader.env.LD_LIBRARY_PATH = /lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu

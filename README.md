@@ -24,6 +24,33 @@ respectively.  Both scripts accept a `--help` flag to display their usage
 statement.
 
 
+Lua 5.3 template
+----------------
+The lua template runs lua5.3.  Since Lua's builtin libraries are minimal,
+I also added the popular thrid-party modules `luaposix` as a trusted.
+
+To install Lua posix, enter
+
+```
+sudo apt-get install lua-posix-dev
+```
+
+There is a bug in the debian lua-posix debian package
+(https://buts.debian.org/cgi-bin/bugreport.cgi?bug=891541); thus, after
+installation, you also have to create a symlink:
+
+```
+sudo ln -s /usr/lib/x8664-linux-gnu/lub/5.3/posix_c.so
+/usr/lib/x86_64-linux-gnu/lua/5.3/posix.so
+```
+
+I have a number of simplified-versions of coreutil programs written in Lua that
+are available under Graphene's `/home` mount.  For instance, to cat a file:
+
+```
+SGX=1 ~/src/graphene/Runtime/pal_loader lua5.3.manifest.sgx /home/cat.lua /home/testfile
+```
+
 Using the fsserver
 ------------------
 
