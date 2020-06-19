@@ -98,6 +98,25 @@ sgx.trusted_files.etc_4 = file:/etc/resolv.conf
 sgx.trusted_files.etc_5 = file:/etc/host.conf
 
 #------------------------------------------------------------
+# MOUNT /usr/share/zoneinfo /usr/share/zoneinfo
+#------------------------------------------------------------
+fs.mount.zoneinfo.type = chroot
+fs.mount.zoneinfo.path = /usr/share/zoneinfo
+fs.mount.zoneinfo.uri = file:/usr/share/zoneinfo
+
+# Note, Graphene (more properly, Graphene's build of lib) has
+# a bug where /etc/localtime (which is a symlink to
+# /usr/share/zoneinfo/America/New_York on my system) is hardcoded
+# to GRAPHENE_ROOT/Runtime/etc/localtime -- a file that doesn't exist.
+# Note that we must also set the TZ and TZDIR environment variables.
+sgx.trusted_files.zoneinfo_0 = file:/usr/share/zoneinfo/posixrules
+sgx.trusted_files.zoneinfo_1 = file:/usr/share/zoneinfo/America/New_York
+
+loader.env.TZ = America/New_York
+loader.env.TZDIR=/usr/share/zoneinfo
+
+
+#------------------------------------------------------------
 # MOUNT /home/smherwig/src/makemanifest-basic/templates/home /home
 #------------------------------------------------------------
 fs.mount.home.type = chroot
